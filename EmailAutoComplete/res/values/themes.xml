@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    
+    <style name="DropDownListView_NoScrollbar" parent="android:style/Theme.NoTitleBar">
+        <item name="android:dropDownListViewStyle">@style/widget_dropdownlistview</item>
+       	<item name="android:autoCompleteTextViewStyle">@style/widget_popupWindow</item>
+    </style>
+
+</resources>
