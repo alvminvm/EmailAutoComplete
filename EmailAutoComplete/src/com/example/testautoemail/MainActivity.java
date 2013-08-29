@@ -10,6 +10,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		EmailAutoCompleteTextView textView = (EmailAutoCompleteTextView)findViewById(R.id.emailAutoCompleteTextView1);
+		textView.setDropDownBackgroundResource(R.drawable.mail_login_email_dropdownlist_bg_no_lt_radius);
 	}
 
 	@Override

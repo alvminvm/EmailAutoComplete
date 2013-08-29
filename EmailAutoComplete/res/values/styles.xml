@@ -20,7 +20,7 @@
     <style name="widget_dropdownlistview" parent="android:style/Widget.Holo.ListView.DropDown">
         <item name="android:scrollbars">none</item>
         <item name="android:divider">@drawable/mail_login_dropdown_divider</item>
-        <item name="android:background">@drawable/mail_login_email_dropdownlist_bg</item>
+        <item name="android:background">#00ffffff</item>
     </style>
     
 	<style name="widget_popupWindow" parent="android:style/Widget.Holo.Light.AutoCompleteTextView">
