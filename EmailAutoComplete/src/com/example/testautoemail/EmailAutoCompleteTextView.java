@@ -81,10 +81,20 @@ public class EmailAutoCompleteTextView extends AutoCompleteTextView {
 			}
 			
 			char endChar = s.charAt(s.length()-1);
+			if (s.length() == 1 && endChar == '@') {
+				setText("");
+				return;
+			} 
 			
 			if (s.toString().contains("@")) {
 				// 邮箱帐户已经输入，加后邮箱后缀提示给用户
 				if(endChar == '@'){
+					endChar = s.charAt(s.length()-2);
+					if (endChar == '@') {
+						setText(s.subSequence(0, s.length()-2));
+						return;
+					}
+					
 					mEmailActvAdapter.clear();
 					int len = emails.length;
 					for(int i=0;i<len;i++){
@@ -92,7 +102,6 @@ public class EmailAutoCompleteTextView extends AutoCompleteTextView {
 					}
 				}
 			}
-			
 			else {
 				mEmailActvAdapter.clear();
 			}
