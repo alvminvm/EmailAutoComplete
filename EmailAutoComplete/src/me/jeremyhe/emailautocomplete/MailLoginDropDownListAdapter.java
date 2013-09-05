@@ -1,4 +1,5 @@
-package com.example.testautoemail;
+package me.jeremyhe.emailautocomplete;
+
 
 import android.content.Context;
 import android.util.Log;
@@ -13,11 +14,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Comparator;
 import java.util.Collections;
-
-import com.example.testautoemail.R;
+import java.util.Comparator;
+import java.util.List;
  
 public class MailLoginDropDownListAdapter<T> extends BaseAdapter implements Filterable {
     /**
@@ -411,35 +410,39 @@ public class MailLoginDropDownListAdapter<T> extends BaseAdapter implements Filt
             } else {
                 String mailString = mail.toString().toLowerCase();
 
-                final ArrayList<T> values = mOriginalValues;
-                final int count = values.size();
-
-                final ArrayList<T> newValues = new ArrayList<T>(count);
-
-                for (int i = 0; i < count; i++) {
-                    final T value = values.get(i);
-                    final String valueText = value.toString().toLowerCase();
-                    final String[] mailSplit = mailString.split("@");
-                    final String[] valueSplit = valueText.split("@");
-
-                    /* 过虑规则：
-                     * ＠之前的部分相等
-                     * ＠之后的为包含
-                     * example: mail = aaa@1,则aaa@126.com,aaa@21cn.com满足要求
-                     */
-                    if (valueSplit[0].equals(mailSplit[0])) {
-                    	if (mailSplit.length>1) {
-                    		if (valueSplit[1].contains(mailSplit[1])) {
-                    			newValues.add(value);
-    						}
-						}
-                    	else {
-                    		newValues.add(value);
-                    	}
-						
-                    }
+                final ArrayList<T> values;
+                synchronized (mLock) {
+                    values = new ArrayList<T>(mOriginalValues);
                 }
+                final int count = values.size();
+                final ArrayList<T> newValues = new ArrayList<T>(count);
+                if (!mailString.matches("@+")) { // 输入的字符串不能全部都是@字符
+                    mailString = mailString.replaceAll("@+", "@"); // 把多个@替换为一个@
+                    final String[] mailSplit = mailString.split("@");
+                    for (int i = 0; i < count; i++) {
+                        final T value = values.get(i);
+                        final String valueText = value.toString().toLowerCase();
+                        final String[] valueSplit = valueText.split("@");
 
+                        /* 过虑规则：
+                         * ＠之前的部分相等
+                         * ＠之后的为包含
+                         * example: mail = aaa@1,则aaa@126.com,aaa@21cn.com满足要求
+                         */
+                        if (valueSplit[0].equals(mailSplit[0])) {
+                            if (mailSplit.length>1) {
+                                if (valueSplit[1].contains(mailSplit[1])) {
+                                    newValues.add(value);
+                                }
+                            }
+                            else {
+                                newValues.add(value);
+                            }
+                            
+                        }
+                    }
+
+                }
                 results.values = newValues;
                 results.count = newValues.size();
             }
@@ -447,6 +450,7 @@ public class MailLoginDropDownListAdapter<T> extends BaseAdapter implements Filt
             return results;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //noinspection unchecked

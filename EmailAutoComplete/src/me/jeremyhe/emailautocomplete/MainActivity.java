@@ -1,4 +1,4 @@
-package com.example.testautoemail;
+package me.jeremyhe.emailautocomplete;
 
 import android.os.Bundle;
 import android.app.Activity;
